@@ -7,6 +7,7 @@ import os
 def stream():
 	# Consumer keys and access tokens, used for OAuth
 	consumer_key = os.getenv('consumer_key')
+	print consumer_key
 	consumer_secret = os.getenv('consumer_secret')
 	access_token = os.getenv('access_token')
 	access_token_secret = os.getenv('access_token_secret')
@@ -21,7 +22,7 @@ def stream():
 	ct = 0
 	tweets = []
 	for tweet in tweepy.Cursor(api.search, q="#tcdisrupt", count=100, include_entities=True, lang="en").items():
-		print ct
+		#print ct
 		tweets.append(tweet)
 		if ct > 100:
 			break
