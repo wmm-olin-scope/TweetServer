@@ -3,20 +3,22 @@ import streaming as streaming
 import os
 from flask import session
 
+
 app = flask.Flask(__name__)
 app.secret_key = "SCOPE"
 
+
 class View(flask.views.MethodView):
 
-	def get(self):
-		print "here"
-		flask.flash(streaming.stream())
-		return flask.render_template('index.html')
+    def get(self):
+        response = flask.make_response(streaming.stream())
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        return response
 
-	def post(self):
-		flask.flash(streaming.stream())
-		return flask.render_template('index.html')
-        
+    def post(self):
+        flask.flash(streaming.stream())
+        return flask.render_template('index.html')
+
 
 app.add_url_rule('/', view_func=View.as_view('main'), methods=['GET', 'POST'])
 
