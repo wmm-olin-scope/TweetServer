@@ -8,6 +8,7 @@ app.secret_key = "SCOPE"
 
 class View(flask.views.MethodView):
 
+	@crossdomain(origin='*')
 	def get(self):
 		print "here"
 		flask.flash(streaming.stream())
@@ -47,9 +48,8 @@ class View(flask.views.MethodView):
 			f.provide_automatic_options = False
 			return update_wrapper(wrapped_function, f)
 		return decorator
-
-@crossdomain(origin='*')		
-app.add_url_rule('/', view_func=View.as_view('main'), methods=['GET', 'OPTIONS'])
+	
+app.add_url_rule('/', view_func=View.as_view('main'), methods=['GET'])
 
 if __name__ == '__main__':
 	# Bind to PORT if defined, otherwise default to 5000.
