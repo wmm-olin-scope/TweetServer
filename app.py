@@ -1,8 +1,8 @@
 import flask, flask.views
 import streaming as streaming
 import os
-from flask import session
-
+from flask import session, request
+import datetime
 
 app = flask.Flask(__name__)
 app.secret_key = "SCOPE"
@@ -11,7 +11,18 @@ app.secret_key = "SCOPE"
 class View(flask.views.MethodView):
 
     def get(self):
-        response = flask.make_response(streaming.stream())
+        min_time = request.args.get('min_time')
+        print min_time, float(min_time)
+
+        if min_time is None:
+            min_time = datetime.datetime.now() + datetime.timedelta(minutes=-1)
+            print min_time
+        else:
+            min_time = datetime.datetime.fromtimestamp(float(min_time))
+            print min_time
+
+        print "starting query"
+        response = flask.make_response(streaming.stream(min_time))
         response.headers['Access-Control-Allow-Origin'] = '*'
         return response
 
